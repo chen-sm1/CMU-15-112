@@ -62,7 +62,7 @@ def applyCaesarCipher(message, shift):
     return result
 
 def largestNumber(s):
-    result = ''
+    '''result = ''
     digit = '' 
     ls = ''
     count = 0
@@ -95,8 +95,31 @@ def largestNumber(s):
             flag = 1
     if flag == 0:
         result = None
-    return result
+    return result'''
+    ls = ''                    #ls 为收集所有数字的字符串 
+    for x in s:
+        if x.isdigit():
+            ls += x
+        else:                  #不为数字的字符用 ‘.’ 隔开
+            ls += '.'
+    ls = ls.split('.')
+    for x in range(ls.count('')):
+        ls.remove('')
+    '''for x in ls:             #若如此书写，不能删除所有‘’，因为列表在循环时候自身元素变少，故迭代次数不等于原列表的长度
+        ls.remove('')'''
 
+    max = 0
+    for x in ls:
+        x = int(x)
+        if x > max:
+            max = x
+    if max == 0:
+        return None
+    else:
+        return max
+        
+
+    
 
 
         
@@ -104,7 +127,37 @@ def largestNumber(s):
 
 
 def topScorer(data):
-    return 42
+    if data == '':
+        return None
+        
+    data = data.splitlines()
+    s1 = data[0]
+    s1 = s1.split(',')
+    name1 = s1[0]
+    s1.pop(0)
+    sum1 = 0
+    for x in s1:
+        sum1 += int(x)
+
+    s2 = data[1]
+    s2 = s2.split(',')
+    name2 = s2[0]
+    s2.pop(0)
+    sum2 = 0
+    for x in s2:
+        sum2 += int(x)
+
+    if sum1 > sum2:
+        return name1
+    elif sum1 < sum2:
+        return name2
+    else:
+        if name1 < name2:
+            return name1 + ',' + name2
+        else:
+            return name2 + ',' + name1
+    #for x in data:
+        
 
 #################################################
 # Part B
