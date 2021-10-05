@@ -164,13 +164,77 @@ def topScorer(data):
 #################################################
 
 def collapseWhitespace(s):
-    return 42
+    result = ''
+    flag = 0
+    for x in s:
+        if x.isalpha():
+            result += x
+            flag = 0
+        else :
+            if flag == 1:
+                continue
+            result += ' '
+            flag = 1
+    return result
+    
+    
+
 
 def patternedMessage(msg, pattern):
-    return 42
+    result = ''
+    msg = msg.replace(' ','')
+    index = 0
+    flag = 0
+    for x in pattern:
+        flag +=1
+        if x == ' ':
+            result += x
+        elif x == '\n':
+            if not(flag == 1 or flag == len(pattern)):      
+                #暂时只想到用 flag 来代表循环来到了第几步
+                result += x
+                '''if not((pattern[0] == x) or (pattern[-1] == x)):    
+                    #不能这样写，因为此处的 if 判定一直为 0
+                        result += x  '''
+                    #不能达到理想的 ‘若首位或末位为 \n，不理会；其他位置为 \n 时，result加上去’
+        else:
+            result += msg[index]
+            index += 1
+            if index > len(msg)-1:
+                index = 0
+    return result
+
 
 def encodeRightLeftRouteCipher(text, rows):
-    return 42
+    ls = ''
+    count = 0
+
+    for x in text:
+        count += 1
+        ls += x
+        if count == rows:
+            count = 0
+            ls += ','
+
+    count = 0
+    for x in range(122,96,-1):
+        count += 1
+        ls += chr(x)
+        if count == (rows-len(text)%rows):
+            count = 0 
+            break
+
+    column = (len(ls)-ls.count(','))//rows
+    ls = ls.split(',')
+    result = str(rows)
+
+    for x in range(rows):
+        for y in range(column):
+            if x%2 == 1:
+                y = -(y+1)
+            result += ls[y][x]   
+    return result
+        
 
 def decodeRightLeftRouteCipher(cipher):
     return 42
