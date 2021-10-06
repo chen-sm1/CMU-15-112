@@ -32,8 +32,16 @@ def rgbString(red, green, blue):
 #################################################
 
 def rotateString(s, k):
-    k=k%len(s)
+    index = 0
+    result = ''
+    for x in range(len(s)):
+        index = k+x
+        if abs(index) > len(s)-1:
+            index = index%len(s)
+        result += s[index]
+    return result
 
+    '''k=k%len(s)                   #解法1
     s_new=''                        #创建一个 不含重复字符 的字符串s_new
     num=0
     for x in range(len(s)):
@@ -45,7 +53,7 @@ def rotateString(s, k):
         index += 1
         newindex = index -k
         s_new = s_new.replace(s_new[newindex],x, 1)
-    return s_new
+    return s_new'''
 
 
 def applyCaesarCipher(message, shift):
@@ -62,40 +70,6 @@ def applyCaesarCipher(message, shift):
     return result
 
 def largestNumber(s):
-    '''result = ''
-    digit = '' 
-    ls = ''
-    count = 0
-    count2 = 0
-    for x in s:
-        count2 += 1
-        if x.isdigit() and count == 1:
-            digit += x
-        if x.isdigit() and count == 0:
-            digit = x 
-            count = 1
-            if count2 == len(s):
-                ls += digit
-        if not x.isdigit():
-            ls += digit+','
-            digit = ''
-            count = 0
-    ls = ls.split(',')
-    max = 0 
-    for x in ls:
-        if x == '':
-            continue
-        x = int(x)
-        if x > max:
-            max = x
-    result = max
-    flag = 0
-    for x in ls:
-        if not x=='':
-            flag = 1
-    if flag == 0:
-        result = None
-    return result'''
     ls = ''                    #ls 为收集所有数字的字符串 
     for x in s:
         if x.isdigit():
@@ -152,7 +126,7 @@ def topScorer(data):
     elif sum1 < sum2:
         return name2
     else:
-        if name1 < name2:
+        if name1 < name2:                      #分数相同按名字
             return name1 + ',' + name2
         else:
             return name2 + ',' + name1
@@ -217,12 +191,17 @@ def encodeRightLeftRouteCipher(text, rows):
             ls += ','
 
     count = 0
-    for x in range(122,96,-1):
-        count += 1
-        ls += chr(x)
-        if count == (rows-len(text)%rows):
+    while 1:
+        for x in range(122,96,-1):
+            count += 1
+            ls += chr(x)
+            if count == (rows-len(text)%rows):
+                count = 'end' 
+                break
+        if count == 'end':
             count = 0 
             break
+        
 
     column = (len(ls)-ls.count(','))//rows
     ls = ls.split(',')
@@ -237,7 +216,37 @@ def encodeRightLeftRouteCipher(text, rows):
         
 
 def decodeRightLeftRouteCipher(cipher):
-    return 42
+    rows = int(cipher[0])
+    text = cipher[1:]
+    column = len(text)//rows
+    ls = ''
+    count = 0
+    for x in text:
+        count += 1
+        ls += x
+        if count == column:         #注意，此处与上一个函数 count == rows 不同
+            count = 0
+            ls += ','
+    
+    ls = ls.split(',')
+    result = ''
+
+    for x in range(column):
+        for y in range(rows):
+            if y%2 == 1:
+                x = -(x+1)
+                result += ls[y][x] 
+                x = -x-1
+                continue
+            result += ls[y][x]    
+    
+    ls = ''
+    for x in result:
+        if not(ord(x) > 96 and ord(x) <123):
+            ls+= x
+    return ls
+
+
 
 #################################################
 # Part B Drawings
